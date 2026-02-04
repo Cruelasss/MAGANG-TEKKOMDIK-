@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // HAPUS baris url di sini
+}
+
+model Peserta {
+  id           String    @id @default(uuid())
+  nama         String
+  email        String    @unique
+  whatsapp     String?   // Penting untuk koordinasi
+  instansi     String
+  jurusan      String
+  tglMulai     DateTime
+  tglSelesai   DateTime
+  status       String    @default("PENDING") // PENDING, AKTIF, SELESAI, TOLAK
+  berkasUrl    String?   // Link CV di Supabase Storage
+  pembimbing   String?
+  adminNotes   String?   // Catatan internal admin
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  logbooks     Logbook[]
+}
+
+model Logbook {
+  id        String   @id @default(uuid())
+  tanggal   DateTime @default(now())
+  kegiatan  String   @db.Text
+  buktiUrl  String?
+  pesertaId String
+  peserta   Peserta  @relation(fields: [pesertaId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  pesertaId String
+  aksi      String   // Contoh: "PENDAFTARAN_MASUK", "DISETUJUI_ADMIN"
+  keterangan String?
+  createdAt DateTime @default(now())
+}
