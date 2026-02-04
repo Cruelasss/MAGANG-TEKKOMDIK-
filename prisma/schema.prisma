@@ -1,11 +1,11 @@
 generator client {
   provider = "prisma-client-js"
-  engineType = "library" 
+  engineType = "library" // 
 }
 
 datasource db {
   provider = "postgresql"
-  // HAPUS baris url di sini
+
 }
 
 model Peserta {
